@@ -1,0 +1,26 @@
+# Created by venv; see https://docs.python.org/3/library/venv.html
+
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+
+# VSCode or other editor settings
+.vscode/
+.idea/
+
+# Python packaging
+*.egg-info/
+build/
+dist/
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# macOS and Windows OS files
+.DS_Store
+Thumbs.db
