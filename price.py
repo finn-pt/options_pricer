@@ -4,7 +4,7 @@ import yfinance as yf
 def binomial_price(S0: float, K: float, T: float, N: int, 
     sigma: float, call_or_put: str, option_type: str) -> float:
     """
-    Determines the price of an option using the Cox, 
+    Determines the price of an option using the Cox,
     Ross and Rubenstein binomial model.
 
     Parameters:
