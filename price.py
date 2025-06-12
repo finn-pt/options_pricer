@@ -114,3 +114,58 @@ def Black_Scholes_price(S0: float, K: float, T: float, sigma: float,
         return S0 * cdf(d1) - K * discount_rate * cdf(d2)
     if call_or_put == "Put":
         return K * discount_rate * cdf(-d2) - S0 * cdf(-d1)
+
+def Monte_Carlo_price(S0: float, K: float, T: float, N: int, sigma: float, 
+    r: float, simulations: int, call_or_put: str, option_type: str) -> float:
+    """
+    Determines the price of an option using the Cox,
+    Ross and Rubenstein binomial model.
+
+    Parameters:
+    S0 (float): inital price in dollars
+    K (float): strike price in dollars
+    T (float): time to expiry in years
+    N (int): number of steps
+    sigma (float): annual volatility
+    r (float): annual risk free rate of return
+    simulations (int): number of simulations
+    call_or_put (str): denotes call or put
+    option_type (str): denotes the type of the option
+
+    Returns:
+    price (float): price of the option in dollars
+    """
+    # calculate time interval length
+    dt: float = T / N
+
+    # Total discount rate
+    discount_rate: float = np.exp(-r * T)
+
+    # create price path array
+    prices = np.zeros((simulations, N + 1))
+    prices[:, 0] = S0
+
+    # add random paths to price array
+    for step in range(1, N + 1):
+        Z = np.random.standard_normal(simulations)
+        prices[:, step] = prices[:, step - 1] * np.exp(dt * 
+            (r - sigma ** 2 * 0.5 ) + sigma * np.sqrt(dt) * Z)
+
+    if option_type == "European":
+        if call_or_put == "Call":
+            payoffs = np.maximum(prices[:-1] - K, 0)
+        elif call_or_put == "Put":
+            payoffs = np.maximum(K - prices[:-1], 0)
+    elif option_type == "Lookback":
+        if call_or_put == "Call":
+            payoffs = np.maximum(prices[:-1] - K, 0)
+        elif call_or_put == "Put":
+            payoffs = np.maximum(K - prices[:-1], 0)
+    elif option_type == "Asian":
+        if call_or_put == "Call":
+            max_prices = np.max(prices, axis = 1)
+            payoffs = np.maximum(max_prices[:-1] - K, 0)
+        elif call_or_put == "Put":
+            min_prices = np.min(prices, axis = 1)
+            payoffs = np.maximum(K - min_prices[:-1], 0)
+    return discount_rate * np.mean(payoffs)
