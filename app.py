@@ -1,6 +1,7 @@
 import streamlit as st
 import yfinance as yf
 import numpy as np
+import matplotlib.pyplot as plt
 from price import binomial_price, Black_Scholes_price, Monte_Carlo_price
 
 st.set_page_config(page_title="Option Pricer", 
@@ -82,7 +83,6 @@ elif (st.session_state.stock_price != None and
                 "Asian"], index = 0)
         submit = st.form_submit_button(label="Simulate Price")
     if submit:
-        #if "MC_option_price" not in st.session_state:
         st.session_state.MC_option_price = Monte_Carlo_price(
             st.session_state.stock_price, 
             K, T, N, st.session_state.sigma, st.session_state.r, 
