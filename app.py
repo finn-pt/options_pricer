@@ -81,8 +81,8 @@ elif (st.session_state.stock_price != None and
         call_or_put = st.selectbox("Option Type", ["Call", "Put"], index = 0)
         option_type = st.selectbox("Option Style", ["European", "Lookback", 
                 "Asian"], index = 0)
-        submit = st.form_submit_button(label="Simulate Price")
-    if submit:
+        simulate = st.form_submit_button(label="Simulate Price")
+    if simulate:
         st.session_state.MC_option_price = Monte_Carlo_price(
             st.session_state.stock_price, 
             K, T, N, st.session_state.sigma, st.session_state.r, 
